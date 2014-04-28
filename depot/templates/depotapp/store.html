@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %} 产品目录 {% endblock %}
+{% block pagename %} 产品目录 {% endblock %}
+
+{% block content %} 
+<div class="row">
+	<div class="span10">	
+{% for item in products %}
+<div class="row" style="padding-top:10">
+	<div class="span3 media-grid">
+		<a href="#">
+	    <img class="thumbnail" src="{{item.image_url}}" alt="">
+	    </a>
+	</div>
+	<div class="span6">
+		<h3>{{item.title}}</h3>
+		<br/>
+		{{item.description}}
+		<br/>
+		<br/>
+		<br/>
+		<div class="row">
+			<div class="span2"><h3>￥{{item.price|floatformat:"2"}}</h3></div>
+			<div class="span"><a class="btn primary" productid="{{item.id}}" href="#">加入购物车</a></div>
+		</div>
+	</div>
+	</div>
+	<div class="page-header">
+</div>
+{% endfor %}
+</div><!--span10-->
+
+<div class="span4">
+	<h5>我的购物车</h5>
+	
+	<br/>
+		<table id="tabCart" class="condensed-table">
+	   <tbody id="items">
+		</tbody>
+		 <tfoot>
+			<tr>
+	          <td></td>
+	          <th>总计：</th>
+	          <td id="totalprice">￥{{cart.total_price|floatformat:"2"}}</td>
+	        </tr>
+		  </tfoot>
+	    </table>
+		
+		<a class="btn danger" href="{% url depotapp.views.clean_cart %}">清空</a>
+		<a class="btn success" href="{% url depotapp.views.create_order %}">结算</a> 
+    </div><!--span4-->
+    
+    
+{% endblock %}
+
+{% block js %}
+<!--js from store.html-->
+<script>
+	function refreshCart(items){
+		total = 0;
+		var tbody = $('tbody#items')[0];
+		tbody.innerHTML = "";
+		for(var i=0;i<items.length;i++){
+			total+=items[i].quantity*items[i].unit_price;
+			$('table#tabCart').append('<tr><td>'+items[i].quantity+'x</td>'+
+				'<td>'+items[i].product+'</td><td>￥'+items[i].unit_price+
+				'</td></tr>');		          
+		}
+		$('#totalprice')[0].innerHTML = '$'+total;
+	}
+</script>
+{% endblock %}
+
+
+
+{% block on_ready %}
+    //store.html on ready
+	$.getJSON('/depotapp/API/cart/items/',refreshCart);
+	
+	$('a.btn[productid]').bind("click",function(){
+		    var product_id=$(this).attr("productid");
+			//alert(product_id);
+			$.post("/depotapp/API/cart/items/post",{product:product_id},refreshCart);
+		}
+	);
+{% endblock %}
+

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %} 我的购物车{% endblock %}
+
+{% block pagename %} 我的购物车  {% endblock %}
+
+{% block content %} 
+<div class="row">
+          <div class="span10">
+            <table class="condensed-table">
+		      <thead>
+		        <tr>
+		          <th class="header">数量</th>
+		          <th class="yellow header">名称</th>
+		          <th class="blue header">单价</th>
+
+		          <th class="green header">小计</th>
+		        </tr>
+		      </thead>
+		      <tbody>
+			  {% for item in cart.items %}
+				<tr>
+		          <th>{{item.quantity}}</th>
+		          <td>{{item.product.title}}</td>
+
+		          <td>{{item.unit_price}}</td>
+		          <td>{% widthratio item.quantity 1 item.unit_price %} </td>
+		        </tr>
+			  {% endfor %}
+				<tr>
+		          <th></th>
+		          <td></td>
+		          <th>总计：</th>
+
+		          <th>{{cart.total_price}}</th>
+		        </tr>
+		      </tbody>
+		    </table>
+			
+
+          </div>
+          <div class="span4">
+            <p><a class="btn primary span2" href="{% url depotapp.views.store_view %}">继续购物</a></a> </p>
+			<p><a class="btn danger span2" href="{% url depotapp.views.clean_cart %}">清空购物车</a></p>
+			<p><a class="btn success" href="{% url depotapp.views.create_order %}">结算</a> </p>
+			
+          </div>
+        </div>
+{% endblock %}

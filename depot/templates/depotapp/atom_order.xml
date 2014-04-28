@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xml:lang="en-US" xmlns="http://www.w3.org/2005/Atom">
+	<id>tag:localhost,2005:/product/{{product.id}/who_bought</id>
+	<link type="text/html" href="{% url depotapp.views.store_view %}" rel="alternate"/>
+	<link type="application/atom+xml" href="{% url depotapp.views.atom_of_order product.id %}" rel="self"/>
+		<title>谁购买了《{{product.title}}》</title>
+	<updated>2012-01-02 12:02:02</updated> 
+{% for order in product.orders.all %}
+	<entry>
+		<id>tag:localhost,2005:order/{{order.id}}</id>
+		<published>2012-01-02 12:02:02</published>
+		<updated>2012-01-02 12:02:02</updated>
+		<link rel="alternate" type="text/html" href="{% url depotapp.views.atom_of_order order.id %}"/>
+		<title>订单{{order.id}}</title>
+		<summary type="xhtml">
+			<div xmlns="http://www.w3.org/1999/xhtml">
+				<p>{{order.address}}</p>				
+			</div>
+		</summary>
+		<author>
+			<name>{{order.name}}</name>
+			<email>{{order.email}}</email>
+		</author>
+	</entry>
+{% endfor %}
+</feed>

@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="description" content="a depot implement with Django"/>
+	<meta name="keywords" content="django,depot" />
+	<meta name="author" content="Holbrook(http://hi.csdn.net/space-2668.html)" />
+	<title>{% block title %} 标题 {% endblock %}</title>
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/css/layout.css">
+</head>
+<body>
+    <script src="/static/js/jquery-1.7.1.min.js"></script>
+    {% block js %}
+        <!--这里插入具体页面引用的js库，或者js代码-->
+     {% endblock %}
+    <script>
+    $(function () {
+        //这里编写base界面的on_ready代码
+        
+        {% block on_ready %}
+            //这里插入具体界面的on_ready代码
+        {% endblock %}
+    });
+    </script>
+ 
+	<div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">Depot</a>
+          <ul class="nav">
+            <li class="active"><a href="#">首页</a></li>
+            <li><a href="#about">问题</a></li>
+            <li><a href="#contact">新闻</a></li>
+			<li><a href="#contact">联系我们</a></li>
+          </ul>
+         {% if request.user.is_authenticated %}
+		<div class="pull-right">
+			<a href=#>欢迎您：{{request.user}}</a>  
+			<a class="btn danger small" href="{% url depotapp.views.logout_view %}">注销</a>
+		</div>
+		{% else %}
+          <form action="{% url depotapp.views.login_view %}" method='post' class="pull-right">
+			{% csrf_token %}
+            <input name='username' class="input-small" type="text" placeholder="用户名">
+            <input name='password' class="input-small" type="password" placeholder="密码">
+            <button class="btn" type="submit">登录</button>
+          </form>
+		{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        <div class="page-header">
+          <h1>{% block pagename %} 页面名称 {% endblock %}</h1>
+        </div>
+		{% block content %} 
+		内容
+		{% endblock %}
+	</div><!-- /content -->
+
+	
+</div><!-- /container -->
+</body>
+</html>

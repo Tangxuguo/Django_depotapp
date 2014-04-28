@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %} 产品清单 {% endblock %}
+
+{% block content %} 
+<div class="container">	
+	<div class="page-header">
+    <h2>产品清单</h2>
+</div>
+{% for item in list_items.object_list %}
+<div class="row" style="padding-top:10">
+	<div class="span3 media-grid">
+		<a href="#">
+	    <img class="thumbnail" src="{{item.image_url}}" alt="">
+	    </a>
+	</div>
+	<div class="span-two-thirds">
+		<h4>{{item.title}}</h4>
+		{{item.description}}
+	</div>
+	<div class="span2" style="align:right">
+		<p><a class="btn primary" href="{% url depotapp.views.view_product item.id %}">查看</a></a> </p>
+		<p><a class="btn success" href="{% url depotapp.views.edit_product item.id %}">编辑</a> </p>
+		<p><a class="btn danger" href="#">删除</a></p>
+	</div>
+</div>
+{% endfor %}
+{% if list_items.has_previous %}
+    <a href="?page={{ list_items.previous_page_number }}">上一页</a>
+{% endif %}
+
+<span class="current">
+    第{{ list_items.number }}页，共{{ list_items.paginator.num_pages }}页
+</span>
+
+{% if list_items.has_next %}
+        <a href="?page={{ list_items.next_page_number }}">下一页</a>
+{% endif %}
+<p>
+<a href="{% url depotapp.views.create_product %}">新增产品</a>
+</p>
+{% endblock %}
+
