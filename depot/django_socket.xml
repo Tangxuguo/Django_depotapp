@@ -1,0 +1,7 @@
+<uwsgi>
+    <socket>:8077</socket>
+    <chdir>/srv/www/depot</chdir>
+    <module>django_wsgi</module>
+    <processes>2</processes> 
+    <daemonize>/srv/www/depot/uwsgi.log</daemonize>
+</uwsgi>
